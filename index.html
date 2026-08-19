@@ -19,6 +19,7 @@
             align-items: center;
             justify-content: center;
             padding: 20px;
+            transition: background 0.5s ease;
         }
         
         .container {
@@ -54,10 +55,23 @@
             transition: background 0.3s ease;
             border: none;
             cursor: pointer;
+            margin: 10px;
         }
         
         .button:hover {
             background: #764ba2;
+        }
+        
+        .color-button {
+            background: #ff6b6b;
+        }
+        
+        .color-button:hover {
+            background: #ee5a52;
+        }
+        
+        .button-group {
+            margin-top: 30px;
         }
     </style>
 </head>
@@ -65,8 +79,30 @@
     <div class="container">
         <h1>Welcome to Claude</h1>
         <p>This is a new web page built with Claude AI assistance.</p>
-        <p>Edit this page and customize it to your needs!</p>
-        <button class="button" onclick="alert('Hello from Claude!')">Click Me</button>
+        <p>Click the "Change Color" button below to change the background color!</p>
+        
+        <div class="button-group">
+            <button class="button" onclick="alert('Hello from Claude!')">Click Me</button>
+            <button class="button color-button" onclick="changeColor()">Change Color</button>
+        </div>
     </div>
+
+    <script>
+        const colors = [
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #f093fb 0%, #f5576c 100%)',
+            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+        ];
+        
+        let currentColorIndex = 0;
+        
+        function changeColor() {
+            currentColorIndex = (currentColorIndex + 1) % colors.length;
+            document.body.style.background = colors[currentColorIndex];
+        }
+    </script>
 </body>
 </html>
