@@ -29,6 +29,7 @@
             padding: 40px;
             max-width: 600px;
             text-align: center;
+            position: relative;
         }
         
         h1 {
@@ -73,6 +74,20 @@
         .button-group {
             margin-top: 30px;
         }
+        
+        .firework {
+            position: fixed;
+            font-size: 2em;
+            pointer-events: none;
+            animation: fall 2s ease-out forwards;
+        }
+        
+        @keyframes fall {
+            to {
+                transform: translateY(500px) translateX(100px) rotateZ(360deg);
+                opacity: 0;
+            }
+        }
     </style>
 </head>
 <body>
@@ -83,7 +98,7 @@
         
         <div class="button-group">
             <button class="button" onclick="alert('Hello from Claude!')">Click Me</button>
-            <button class="button color-button" onclick="changeColor()">Change Color</button>
+            <button class="button color-button" onclick="changeColorWithFireworks()">Change Color</button>
         </div>
     </div>
 
@@ -97,11 +112,35 @@
             'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
         ];
         
+        const fireworks = ['🎆', '✨', '🎇', '⭐', '💫'];
         let currentColorIndex = 0;
         
-        function changeColor() {
+        function createFirework(x, y) {
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.textContent = fireworks[Math.floor(Math.random() * fireworks.length)];
+            firework.style.left = x + 'px';
+            firework.style.top = y + 'px';
+            
+            document.body.appendChild(firework);
+            
+            setTimeout(() => {
+                firework.remove();
+            }, 2000);
+        }
+        
+        function changeColorWithFireworks() {
             currentColorIndex = (currentColorIndex + 1) % colors.length;
             document.body.style.background = colors[currentColorIndex];
+            
+            // Create multiple fireworks
+            for (let i = 0; i < 15; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createFirework(x, y);
+                }, i * 50);
+            }
         }
     </script>
 </body>
