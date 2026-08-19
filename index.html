@@ -27,9 +27,8 @@
             border-radius: 10px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
             padding: 40px;
-            max-width: 600px;
+            max-width: 800px;
             text-align: center;
-            position: relative;
         }
         
         h1 {
@@ -49,10 +48,11 @@
             display: inline-block;
             background: #667eea;
             color: white;
-            padding: 12px 30px;
+            padding: 15px 40px;
             border-radius: 5px;
             text-decoration: none;
             font-weight: bold;
+            font-size: 1em;
             transition: background 0.3s ease;
             border: none;
             cursor: pointer;
@@ -73,6 +73,74 @@
         
         .button-group {
             margin-top: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .gallery-section {
+            margin-top: 40px;
+            border-top: 2px solid #eee;
+            padding-top: 30px;
+        }
+        
+        .gallery-title {
+            color: #333;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+        
+        .photo-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            background: #f0f0f0;
+        }
+        
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: opacity 0.5s ease;
+        }
+        
+        .gallery-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        
+        .play-button {
+            background: #43e97b;
+            padding: 12px 30px;
+            font-size: 1em;
+        }
+        
+        .play-button:hover {
+            background: #38f9d7;
+        }
+        
+        .play-button.playing {
+            background: #ff6b6b;
+        }
+        
+        .prev-next-button {
+            background: #667eea;
+            padding: 12px 25px;
+            font-size: 0.9em;
+        }
+        
+        .prev-next-button:hover {
+            background: #764ba2;
+        }
+        
+        .photo-counter {
+            color: #666;
+            font-size: 1em;
+            margin-top: 15px;
         }
         
         .firework {
@@ -94,11 +162,28 @@
     <div class="container">
         <h1>Welcome to Claude</h1>
         <p>This is a new web page built with Claude AI assistance.</p>
-        <p>Click the "Change Color" button to see the magic!</p>
+        <p>Click the buttons to see the magic!</p>
         
         <div class="button-group">
-            <button class="button" onclick="alert('Hello from Claude!')">Click Me</button>
-            <button class="button color-button" onclick="changeColorWithFireworks()">Change Color</button>
+            <button class="button" type="button" onclick="handleClick()">Click Me</button>
+            <button class="button color-button" type="button" onclick="handleColorChange()">Change Color</button>
+        </div>
+        
+        <div class="gallery-section">
+            <div class="gallery-title">🌿 My Pictures</div>
+            <div class="photo-container">
+                <img id="galleryPhoto" src="" alt="Gallery Photo">
+            </div>
+            
+            <div class="gallery-controls">
+                <button class="button prev-next-button" type="button" onclick="previousPhoto()">← Previous</button>
+                <button class="button play-button" id="playBtn" type="button" onclick="togglePlaySlideshow()">▶ Play</button>
+                <button class="button prev-next-button" type="button" onclick="nextPhoto()">Next →</button>
+            </div>
+            
+            <div class="photo-counter">
+                <span id="photoCount">Photo 1 of 8</span>
+            </div>
         </div>
     </div>
 
@@ -112,8 +197,26 @@
             'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
         ];
         
+        const photos = [
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1495854035989-cebf13d88e10?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=800&h=600&fit=crop',
+            'https://images.unsplash.com/photo-1469022563149-aa64dbd37dae?w=800&h=600&fit=crop'
+        ];
+        
         const fireworks = ['🎆', '✨', '🎇', '⭐', '💫'];
         let currentColorIndex = 0;
+        let currentPhotoIndex = 0;
+        let isPlaying = false;
+        let slideshowInterval;
+        
+        function handleClick() {
+            alert('Hello from Claude!');
+        }
         
         function createFirework(x, y) {
             const firework = document.createElement('div');
@@ -124,23 +227,63 @@
             
             document.body.appendChild(firework);
             
-            setTimeout(() => {
+            setTimeout(function() {
                 firework.remove();
             }, 2000);
         }
         
-        function changeColorWithFireworks() {
+        function handleColorChange() {
             currentColorIndex = (currentColorIndex + 1) % colors.length;
             document.body.style.background = colors[currentColorIndex];
             
             for (let i = 0; i < 15; i++) {
-                setTimeout(() => {
+                setTimeout(function() {
                     const x = Math.random() * window.innerWidth;
                     const y = Math.random() * window.innerHeight;
                     createFirework(x, y);
                 }, i * 50);
             }
         }
+        
+        function displayPhoto(index) {
+            const photoElement = document.getElementById('galleryPhoto');
+            const counterElement = document.getElementById('photoCount');
+            
+            photoElement.src = photos[index];
+            counterElement.textContent = 'Photo ' + (index + 1) + ' of ' + photos.length;
+        }
+        
+        function nextPhoto() {
+            currentPhotoIndex = (currentPhotoIndex + 1) % photos.length;
+            displayPhoto(currentPhotoIndex);
+        }
+        
+        function previousPhoto() {
+            currentPhotoIndex = (currentPhotoIndex - 1 + photos.length) % photos.length;
+            displayPhoto(currentPhotoIndex);
+        }
+        
+        function togglePlaySlideshow() {
+            const playBtn = document.getElementById('playBtn');
+            
+            if (isPlaying) {
+                clearInterval(slideshowInterval);
+                playBtn.textContent = '▶ Play';
+                playBtn.classList.remove('playing');
+                isPlaying = false;
+            } else {
+                playBtn.textContent = '⏸ Stop';
+                playBtn.classList.add('playing');
+                isPlaying = true;
+                
+                slideshowInterval = setInterval(function() {
+                    nextPhoto();
+                }, 3000);
+            }
+        }
+        
+        // Initialize with first photo
+        displayPhoto(0);
     </script>
 </body>
 </html>
