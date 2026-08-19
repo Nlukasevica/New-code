@@ -12,7 +12,7 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: Arial, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             display: flex;
@@ -94,7 +94,7 @@
     <div class="container">
         <h1>Welcome to Claude</h1>
         <p>This is a new web page built with Claude AI assistance.</p>
-        <p>Click the "Change Color" button below to change the background color!</p>
+        <p>Click the "Change Color" button to see the magic!</p>
         
         <div class="button-group">
             <button class="button" onclick="alert('Hello from Claude!')">Click Me</button>
@@ -109,7 +109,7 @@
             'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
             'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
             'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
-            'linear-gradient(135deg, #30cfd0 0%, #330867 100%)',
+            'linear-gradient(135deg, #30cfd0 0%, #330867 100%)'
         ];
         
         const fireworks = ['🎆', '✨', '🎇', '⭐', '💫'];
@@ -133,7 +133,6 @@
             currentColorIndex = (currentColorIndex + 1) % colors.length;
             document.body.style.background = colors[currentColorIndex];
             
-            // Create multiple fireworks
             for (let i = 0; i < 15; i++) {
                 setTimeout(() => {
                     const x = Math.random() * window.innerWidth;
